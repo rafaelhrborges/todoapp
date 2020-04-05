@@ -11,7 +11,7 @@
 	<groupId>br.com.esig</groupId>
 	<artifactId>todoapp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>desafio</name>
+	<name>todoapp</name>
 	<description>Projeto desafio para candidatura a ESIG</description>
 
 	<properties>
