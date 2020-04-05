@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>TODO App</title>
+
+	<meta http-equiv="Content-Type"
+		content="application/xhtml+xml; charset=utf-8" />
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1, shrink-to-fit=yes" />
+	<meta name="author" content="Rafael Borges" />
+	<meta name="description" content="Todo App" />
+
+
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+		rel="stylesheet" />
+
+	<link
+		href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		rel="stylesheet" />
+
+	<link
+		href='//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.css'
+		rel="stylesheet" />
+
+	<link
+		href="#{facesContext.externalContext.requestContextPath}/resources/css/app.css"
+		rel="stylesheet" />
+
+</h:head>
+
+<h:body>
+	<div class="container d-flex justify-content-center mt-3">
+		<div class="col-lg-12">
+			<div class="card px-3">
+				<div class="card-body">
+					<h2 class="card-title">Lista de Tarefas</h2>
+					<h:form id="todoForm" class="add-items d-flex" autocomplete="off">
+						<div class="check-all-input">
+							<p:selectBooleanCheckbox value="#{todoListController.checkAll}"
+								styleClass="checkbox">
+								<p:ajax listener="#{todoListController.toggleCheckAll()}"
+									update=":todoList" />
+							</p:selectBooleanCheckbox>
+						</div>
+
+						<p:inputText id="newTaskInput" required="true"
+							value="#{todoListController.task.title}" autocomplete="off"
+							styleClass="form-control todo-list-input"
+							placeholder="O que precisa ser feito?" />
+
+						<p:commandLink id="addButton"
+							styleClass="btn btn-primary font-weight-bold todo-list-add-btn"
+							action="#{todoListController.addTask}" update="@form :todoList">
+							<span class="material-icons">add</span>
+						</p:commandLink>
+
+						<p:defaultCommand target="addButton"></p:defaultCommand>
+					</h:form>
+					<div class="list-wrapper">
+						<p:dataList value="#{todoListController.tasks}" var="task"
+							styleClass="d-flex flex-column-reverse todo-list" id="todoList"
+							type="unordered" itemType="none" emptyMessage=""
+							itemStyleClass="#{task.completed ? 'completed' : ''}">
+							<h:panelGroup layout="block" id="todoItem"
+								class="form-check d-flex justify-content-between w-100 align-items-center">
+								<p:selectBooleanCheckbox value="#{task.completed}"
+									styleClass="checkbox">
+									<p:ajax
+										listener="#{todoListController.markTaskAsCompleted(task.id)}"
+										process=":todoList" update=":todoList :todoForm" />
+								</p:selectBooleanCheckbox>
+								<label class="form-check-label"> #{task.title} <i
+									class="input-helper"></i>
+								</label>
+								<p:commandButton id="removeTaskButton" icon="pi pi-trash">
+									<p:ajax listener="#{todoListController.removeTask(task)}"
+										update=":todoList" />
+								</p:commandButton>
+							</h:panelGroup>
+						</p:dataList>
+					</div>
+					
+					<div class="d-flex justify-content-center mt-2">
+						<h:form>
+							<p:selectOneButton value="#{todoListController.filterOption}">
+					            <f:selectItem itemLabel="Todos" itemValue="all" />
+					            <f:selectItem itemLabel="Pendentes" itemValue="pending" />
+					            <f:selectItem itemLabel="Executadas" itemValue="completed" />
+					            
+					            <p:ajax update=":todoList"/>
+					        </p:selectOneButton>
+				        </h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- JQuery -->
+	<h:outputScript library="primefaces" name="jquery/jquery.js" />
+
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+</h:body>
+</html>
