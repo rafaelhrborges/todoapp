@@ -43,7 +43,6 @@ public class TodoListController {
 	}
 
 	public void addTask() {
-		System.out.println("saving");
 		this.taskService.save(task);
 		task = new Task();
 		this.loadTasks();
@@ -61,7 +60,7 @@ public class TodoListController {
 	}
 	
 	public Boolean getCheckAll() {
-		return this.tasks.stream().filter(task -> {
+		return this.tasks.size() > 0 && this.tasks.stream().filter(task -> {
 			return task.getCompleted();
 		}).count() == this.tasks.size() ? true : this.checkAll;
 	}
@@ -88,6 +87,8 @@ public class TodoListController {
 					return task.getCompleted();
 			}
 			return true;
+		}).sorted((t1, t2) -> {
+			return t1.getId() > t2.getId() ? 1 : -1;
 		}).collect(Collectors.toList());
 	}
 }
